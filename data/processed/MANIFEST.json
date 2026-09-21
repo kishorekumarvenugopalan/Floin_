@@ -1,0 +1,12 @@
+{
+  "module": 2,
+  "generated": "2026-09-15T21:33:49.292622",
+  "bounds": [
+    80.1,
+    12.88,
+    80.35,
+    13.25
+  ],
+  "crs": "EPSG:4326/CRS84",
+  "note": "Cleaned vectors + terrain rasters ready for PostGIS"
+}

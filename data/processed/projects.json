@@ -1,0 +1,19 @@
+[
+  {
+    "id": "proj-1789116236893-2c9v7k0",
+    "name": "Smoke Verification",
+    "description": "Temporary end-to-end verification",
+    "location": {
+      "lat": 13.035,
+      "lng": 80.255
+    },
+    "status": "active",
+    "datasets": [],
+    "scenarios": [
+      "scn-1789116236926-bqe6dha"
+    ],
+    "savedLocations": [],
+    "createdAt": "2026-09-11T08:43:56.893Z",
+    "updatedAt": "2026-09-11T08:43:56.926Z"
+  }
+]

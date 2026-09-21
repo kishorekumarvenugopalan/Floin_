@@ -1,0 +1,44 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_river_gauge_cooum 1"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.19147638365679,
+     13.098686460982945
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_river_gauge_cooum 2"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.24673140713834,
+     13.112046817576813
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_river_gauge_cooum 3"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.21399298287719,
+     13.028700773144948
+    ]
+   }
+  }
+ ]
+}

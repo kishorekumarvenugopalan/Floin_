@@ -1,0 +1,44 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_helpline_calls_2015 1"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.28942851643149,
+     13.038251212898986
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_helpline_calls_2015 2"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.25589190329521,
+     13.091464731585834
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_helpline_calls_2015 3"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.23641184101596,
+     13.083144974481387
+    ]
+   }
+  }
+ ]
+}

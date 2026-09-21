@@ -1,0 +1,44 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_ngo_resources 1"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.25652234895541,
+     13.043800600204067
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_ngo_resources 2"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.26358080348862,
+     13.09045357473765
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "chennai_ngo_resources 3"
+   },
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     80.2883695440407,
+     13.094504443463432
+    ]
+   }
+  }
+ ]
+}

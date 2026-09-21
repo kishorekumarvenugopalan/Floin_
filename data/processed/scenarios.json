@@ -1,0 +1,44 @@
+[
+  {
+    "id": "scn-1789116236926-bqe6dha",
+    "projectId": "proj-1789116236893-2c9v7k0",
+    "name": "Smoke Scenario",
+    "description": "Temporary end-to-end verification",
+    "parameters": {
+      "rainfall": 120,
+      "cn": 78,
+      "duration": 45,
+      "timestamp": "2026-09-11T08:43:56.926Z"
+    },
+    "aoi": {
+      "bounds": {
+        "xmax": 80.27,
+        "ymax": 13.05,
+        "xmin": 80.24,
+        "ymin": 13.02
+      }
+    },
+    "results": {
+      "requestId": "res-1789116236926",
+      "hydrology": {
+        "runoff_mm": 0,
+        "s": 0,
+        "ia": 0,
+        "q": 0
+      },
+      "flood": {
+        "depth_m": 0,
+        "velocity_ms": 0,
+        "extent_percent": 0,
+        "affectedBuildings": 0,
+        "affectedRoads": 0
+      },
+      "timeSeries": [],
+      "datasetsUsed": [],
+      "generatedAt": "2026-09-11T08:43:56.926Z"
+    },
+    "status": "draft",
+    "createdAt": "2026-09-11T08:43:56.926Z",
+    "updatedAt": "2026-09-11T08:43:56.926Z"
+  }
+]
