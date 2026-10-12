@@ -53,6 +53,38 @@ VECTOR_LAYERS = [
     "chennai2015_inundation",
     "chennai2015_hotspots",
     "chennai2015_flooded_streets",
+    # 2026-10 dataset expansion — must mirror floin_expected_layers (db/schema.sql),
+    # the vectors list in scripts/load_postgis.py and VECTORS in db/bootstrap-load.sh.
+    "chennai_basin_buckingham_canal_map_1bb30ede",
+    "chennai_basin_macro_drains_map_80b07b87",
+    "chennai_basin_micro_drains_map_4d6437e5",
+    "chennai_basin_rivers_and_streams_map_9434de03",
+    "chennai_flood_hazard_zones_map_7f29da20",
+    "chennai_flooding_points_in_2015_93d2905a",
+    "chennai_flows_10_years_return_period_1bfef958",
+    "chennai_flows_100_years_return_period_994a99a1",
+    "chennai_flows_200_years_return_period_61f1f06f",
+    "chennai_flows_25_year_return_period_a6b4f2b1",
+    "chennai_flows_50_years_return_period_a6b20b7c",
+    "chennai_flows_5_year_return_period_ef3286de",
+    "chennai_gcc_flood_extent_2005_c49407c8",
+    "chennai_gcc_flood_hostspots_2020_3a141c21",
+    "chennai_inundation_points_with_depth_of_inundation_814ca028",
+    "chennai_neighbourhood_parks_map_81043b6d",
+    "chennai_rivers_map_c6393f3d",
+    "chennai_slum_boundaries_map_5959f0f4",
+    "chennai_slums_map_02144a0c",
+    "chennai_storm_water_drains_swd_map_2023_c4907fed",
+    "chennai_uchcs_map_a604ea86",
+    "chennai_uphcs_map_a33b403b",
+    "chennai_water_census_map_2023_7e357cf5",
+    "chennai_waterbodies_map_2019_8d557090",
+    "fl20151123ind_shp_ls8_20151014_preflood",
+    "fl20151123ind_shp_s1_20150901_preflood",
+    "fl20151123ind_shp_s1_20151112_flood",
+    "fl20151123ind_shp_s1_20151124_flood",
+    "sewage_ventilating_columns_5d31106a",
+    "sewerage_command_area_b186696c",
 ]
 
 
@@ -149,6 +181,8 @@ def layer_counts(dry: bool) -> dict:
     """Exact row counts — reltuples reports -1 on a never-analysed restore."""
     out = {}
     for layer in VECTOR_LAYERS:
+        # 38 layers = 38 sequential round-trips; a restore that is still catching up
+        # reports -1 for a layer rather than failing the whole verify run.
         raw = psql(f"SELECT count(*) FROM public.{layer};", dry)
         out[layer] = int(raw) if raw.isdigit() else -1
     return out

@@ -1,6 +1,6 @@
 # DB SHARING — how the spatial database travels over GitHub
 
-> Last verified `2026-09-30`. Expected layers: 8 vectors + 5 rasters = 13 (`db/schema.sql` + `floin_expected_layers`). Local TIFFs cleaned 2026-09-30; rebuild via image/dump or re-drop TIFFs into `data/rasters/`.
+> Last verified `2026-10-12`. Expected layers: 38 vectors + 5 rasters = 43 (`db/schema.sql` + `floin_expected_layers`, `schema_version` 2 — the 2026-10 expansion added 30 vector layers). Local TIFFs cleaned 2026-09-30; rebuild via image/dump or re-drop TIFFs into `data/rasters/`.
 
 > The database is a **build product**, not source. `data/vectors/*.geojson` + `data/rasters/*.tif`
 > are the inputs, `db/schema.sql` + `scripts/load_postgis.py` are the recipe, and the materialised
@@ -28,13 +28,28 @@
 
 | Artifact | Home | Tracked in git | Contains |
 |---|---|---|---|
-| `db/schema.sql` | repo | yes | PostGIS extension, `floin_meta`, `floin_expected_layers`, 8 vector skeletons + GIST, `floin_ingest_log`, `floin_db_report`, read grants |
-| `data/vectors/*.geojson` | repo | yes (331 files, ~110 MB) | every vector layer's input data |
+| `db/schema.sql` | repo | yes | PostGIS extension, `floin_meta`, `floin_expected_layers`, 38 vector skeletons + GIST, `floin_ingest_log`, `floin_db_report`, read grants |
+| `data/vectors/*.geojson` | repo | yes (331 files, ~113 MB) | every vector layer's raw input data |
+| `data/processed/vectors/*.geojson` | repo | yes (296 files, ~23 MB) | cleaned/clipped output of the data pipeline — the loaders try this first and fall back to `data/vectors` per file (the 2026-10 layers are raw-only so far) |
 | `data/rasters/rasters_COP30/DEM.tif` + 4 derived `.tif` | **local disk only** | no (`.gitignore`) | raster layers `dem`, `flow_direction`, `flow_accumulation`, `watershed`, `streams` |
 | `db/Dockerfile`, `db/bootstrap-load.sh` | repo | yes | the prebuilt image: schema + data baked in, loads on first boot |
 | `.github/workflows/db.yml` | repo | yes | builds → boots → verifies → dumps → publishes |
 | `db/dumps/*.dump` + `*.meta.json` | **Release asset** | no (`db/dumps/` ignored) | full database, `pg_dump -Fc` + sha256/row-count sidecar |
 | `ghcr.io/kishorekumarvenugopalan/floin-postgis` | GHCR | n/a | the same database as a container image |
+
+**2026-10 expansion.** 30 more vector layers arrived as raw `data/vectors` files (GCC/OSM/GEE
+connector exports): flood hazard zones, the six return-period flow layers, the 2015
+Sentinel-1/Landsat flood extents, drains, slums, health and water points. They are registered
+in `floin_expected_layers` **and** in all three loader lists, so `db:load`, the prebuilt image
+and CI pick them up with no extra flag. Two things worth knowing:
+
+- Several mix `Polygon` + `MultiPolygon` + `GeometryCollection` in one file (and
+  `chennai_gcc_flood_extent_2005`, `chennai_rivers_map`, `chennai_slum_boundaries` are
+  GeometryCollection-only) — exactly the case the generic `geometry(Geometry,4326)` typmod exists for.
+- Table names keep the source hash suffix (`chennai_flows_5_year_return_period_ef3286de`) so a table
+  still maps 1:1 to the file that produced it. The four `fl20151123ind_shp_*` extents are **regional**
+  (≈80.0–80.9 °E, 12.1–14.4 °N), i.e. not clipped to the city until the data pipeline produces a
+  `data/processed/vectors` copy.
 
 Consequence to be explicit about: **a clean clone rebuilds a vector-only database.** The five raster
 layers arrive only through a locally built image or a dump produced on a machine that has the TIFFs.
@@ -108,7 +123,7 @@ so any shared database must keep:
 |---|---|
 | a column named `geom` | `db/schema.sql` vector skeletons, `ogr2ogr -lco GEOMETRY_NAME=geom`, `raster2pgsql` raster tables |
 | SRID 4326 | `geometry(Geometry, 4326)` typmod, `raster2pgsql -s 4326`, `floin_meta.crs` |
-| the 8 vector table names | `TABLE_MAP` in both routes ↔ `floin_expected_layers` (checked by `npm run db:verify`) |
+| the 38 vector table names | `floin_expected_layers` (checked by `npm run db:verify`); the original 8 are the ones `TABLE_MAP` in both routes resolves, the 2026-10 layers are extra tables the API does not special-case |
 | queryable without PostGIS | `app/lib/postgis.ts` `tryPostGISQuery()` → `fileFallbackQuery()` reads `public/<id>.geojson`; `source` in the response tells you which path answered |
 
 `GET /api/location/terrain` reports `postgisConfigured` from the mere presence of `DATABASE_URL`
@@ -131,6 +146,7 @@ npm run db:verify -- --strict     # rasters count too (use before publishing an 
 | `db_share.py verify` → `floin_db_report missing` | `db/schema.sql` not applied | `psql "$DATABASE_URL" -f db/schema.sql` |
 | `db_share.py verify` → vectors `0 rows` | schema applied, data not loaded | `npm run db:load` (or `npm run db:pull`) |
 | rasters `MISSING` | TIFFs are gitignored, so CI-built images are vector-only | drop the TIFFs into `data/rasters/` and `npm run db:image` |
+| `verify` hangs for minutes on a cold clone | 38 vector layers now load before `verify` can pass (the CI wait loop gates on `floin_ingest_log`, not on `buildings`) | run `python scripts/load_postgis.py` once and watch it finish; then `npm run db:verify` |
 | `pg_dump: command not found` | no local PostgreSQL client | keep the compose container up — `db_share.py` then uses `docker exec floin-postgis` |
 
 ---

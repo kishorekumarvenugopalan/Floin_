@@ -34,7 +34,7 @@ COPY db/schema.sql /docker-entrypoint-initdb.d/10-floin-schema.sql
 COPY db/bootstrap-load.sh /docker-entrypoint-initdb.d/20-floin-load.sh
 RUN chmod +x /docker-entrypoint-initdb.d/20-floin-load.sh
 
-# Canonical inputs. data/vectors is tracked in git (~110 MB) so CI always has it;
+# Canonical inputs. data/vectors is tracked in git (~113 MB, 331 files) so CI always has it;
 # data/rasters only holds .gitkeep in a clean clone — add the TIFFs locally to bake
 # the raster layers (dem, flow_*, watershed, streams) into a locally built image.
 COPY data/vectors/ /opt/floin/data/vectors/

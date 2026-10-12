@@ -59,11 +59,14 @@ jobs:
           docker run -d --name floin-db \
             -e POSTGRES_USER=floin -e POSTGRES_DB=floin -e POSTGRES_PASSWORD=floin \
             -p 5432:5432 floin-postgis:ci
-          for attempt in $(seq 1 90); do
-            rows=$(docker exec floin-db psql -U floin -d floin -tAc \
-              "SELECT count(*) FROM buildings" 2>/dev/null || echo 0)
-            echo "attempt ${attempt}: buildings=${rows}"
-            [ "${rows}" -gt 0 ] && break
+          # 38 vector layers load on first boot now (the 2026-10 expansion), so gate on the
+          # ingest log: waiting only for `buildings` let verify run mid-load and fail on
+          # whichever layer had not been written yet.
+          for attempt in $(seq 1 180); do
+            loaded=$(docker exec floin-db psql -U floin -d floin -tAc \
+              "SELECT count(*) FROM floin_ingest_log WHERE layer_role='vector'" 2>/dev/null || echo 0)
+            echo "attempt ${attempt}: vector layers loaded=${loaded}/38"
+            [ "${loaded}" -ge 38 ] && break
             sleep 5
           done
 

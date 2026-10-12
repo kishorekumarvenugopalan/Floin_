@@ -17,6 +17,12 @@
 -- app/api/location/query/route.ts:55-57 — GeometryCollection is common in the GCC KML
 -- exports. A narrower typmod would reject those rows. Dominant type per layer is
 -- recorded in floin_expected_layers.geom_type instead.
+--
+-- The 2026-10 dataset expansion adds 30 raw layers from data/vectors (GCC/OSM/GEE
+-- exports). Several of them mix Polygon + MultiPolygon + GeometryCollection inside a
+-- single file — and chennai_gcc_flood_extent_2005, chennai_rivers_map and
+-- chennai_slum_boundaries are GeometryCollection-only — so the generic typmod is what
+-- makes these loadable at all.
 
 CREATE EXTENSION IF NOT EXISTS postgis;
 
@@ -31,13 +37,14 @@ CREATE TABLE IF NOT EXISTS floin_meta (
 );
 
 INSERT INTO floin_meta (key, value) VALUES
-  ('schema_version', '1'),
+  ('schema_version', '2'),
   ('crs',            'EPSG:4326'),
   ('generator',      'db/schema.sql'),
   ('data_root',      'data/vectors + data/rasters (see docs/DB_SHARING.md)')
 ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = now();
 
--- Expected layers — mirrors scripts/load_postgis.py and db/bootstrap-load.sh.
+-- Expected layers — mirrors scripts/load_postgis.py and db/bootstrap-load.sh (all
+-- three lists are the same 38 layers; keep them in sync when adding data).
 -- `scripts/db_share.py verify` diffs this against the live database, so a stale
 -- dump or a skipped file shows up immediately instead of silently returning 0 rows.
 CREATE TABLE IF NOT EXISTS floin_expected_layers (
@@ -60,7 +67,41 @@ INSERT INTO floin_expected_layers (layer_name, layer_role, source_file, geom_typ
   ('flow_direction',              'raster', 'Flow_Direction.tif',                  'raster'),
   ('flow_accumulation',           'raster', 'Flow_Accumulation.tif',               'raster'),
   ('watershed',                   'raster', 'Watershed.tif',                       'raster'),
-  ('streams',                     'raster', 'Streams.tif',                         'raster')
+  ('streams',                     'raster', 'Streams.tif',                         'raster'),
+  -- 2026-10 expansion — raw layers living in data/vectors. The data pipeline has not
+  -- produced data/processed/vectors copies for these yet, so scripts/load_postgis.py
+  -- and db/bootstrap-load.sh fall back to the raw file (same `geom`/EPSG:4326 contract).
+  -- Table name == file stem: the hash suffix is part of the source id, not decoration.
+  ('chennai_basin_buckingham_canal_map_1bb30ede',       'vector', 'chennai_basin_buckingham_canal_map_1bb30ede.geojson',       'LineString/MultiLineString'),
+  ('chennai_basin_macro_drains_map_80b07b87',           'vector', 'chennai_basin_macro_drains_map_80b07b87.geojson',           'LineString'),
+  ('chennai_basin_micro_drains_map_4d6437e5',           'vector', 'chennai_basin_micro_drains_map_4d6437e5.geojson',           'LineString/MultiLineString'),
+  ('chennai_basin_rivers_and_streams_map_9434de03',     'vector', 'chennai_basin_rivers_and_streams_map_9434de03.geojson',     'LineString/MultiLineString'),
+  ('chennai_flood_hazard_zones_map_7f29da20',           'vector', 'chennai_flood_hazard_zones_map_7f29da20.geojson',           'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_flooding_points_in_2015_93d2905a',          'vector', 'chennai_flooding_points_in_2015_93d2905a.geojson',          'Point'),
+  ('chennai_flows_10_years_return_period_1bfef958',     'vector', 'chennai_flows_10_years_return_period_1bfef958.geojson',     'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_flows_100_years_return_period_994a99a1',    'vector', 'chennai_flows_100_years_return_period_994a99a1.geojson',    'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_flows_200_years_return_period_61f1f06f',    'vector', 'chennai_flows_200_years_return_period_61f1f06f.geojson',    'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_flows_25_year_return_period_a6b4f2b1',      'vector', 'chennai_flows_25_year_return_period_a6b4f2b1.geojson',      'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_flows_50_years_return_period_a6b20b7c',     'vector', 'chennai_flows_50_years_return_period_a6b20b7c.geojson',     'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_flows_5_year_return_period_ef3286de',       'vector', 'chennai_flows_5_year_return_period_ef3286de.geojson',       'Polygon/MultiPolygon/GeometryCollection'),
+  ('chennai_gcc_flood_extent_2005_c49407c8',            'vector', 'chennai_gcc_flood_extent_2005_c49407c8.geojson',            'GeometryCollection'),
+  ('chennai_gcc_flood_hostspots_2020_3a141c21',         'vector', 'chennai_gcc_flood_hostspots_2020_3a141c21.geojson',         'Point'),
+  ('chennai_inundation_points_with_depth_of_inundation_814ca028', 'vector', 'chennai_inundation_points_with_depth_of_inundation_814ca028.geojson', 'Point'),
+  ('chennai_neighbourhood_parks_map_81043b6d',          'vector', 'chennai_neighbourhood_parks_map_81043b6d.geojson',          'Point'),
+  ('chennai_rivers_map_c6393f3d',                       'vector', 'chennai_rivers_map_c6393f3d.geojson',                       'GeometryCollection'),
+  ('chennai_slum_boundaries_map_5959f0f4',              'vector', 'chennai_slum_boundaries_map_5959f0f4.geojson',              'GeometryCollection'),
+  ('chennai_slums_map_02144a0c',                        'vector', 'chennai_slums_map_02144a0c.geojson',                        'Point'),
+  ('chennai_storm_water_drains_swd_map_2023_c4907fed',  'vector', 'chennai_storm_water_drains_swd_map_2023_c4907fed.geojson',  'LineString/MultiLineString'),
+  ('chennai_uchcs_map_a604ea86',                        'vector', 'chennai_uchcs_map_a604ea86.geojson',                        'Point'),
+  ('chennai_uphcs_map_a33b403b',                        'vector', 'chennai_uphcs_map_a33b403b.geojson',                        'Point'),
+  ('chennai_water_census_map_2023_7e357cf5',            'vector', 'chennai_water_census_map_2023_7e357cf5.geojson',            'Point'),
+  ('chennai_waterbodies_map_2019_8d557090',             'vector', 'chennai_waterbodies_map_2019_8d557090.geojson',             'GeometryCollection'),
+  ('fl20151123ind_shp_ls8_20151014_preflood',           'vector', 'fl20151123ind_shp_ls8_20151014_preflood.geojson',           'Polygon'),
+  ('fl20151123ind_shp_s1_20150901_preflood',            'vector', 'fl20151123ind_shp_s1_20150901_preflood.geojson',            'Polygon'),
+  ('fl20151123ind_shp_s1_20151112_flood',               'vector', 'fl20151123ind_shp_s1_20151112_flood.geojson',               'Polygon'),
+  ('fl20151123ind_shp_s1_20151124_flood',               'vector', 'fl20151123ind_shp_s1_20151124_flood.geojson',               'MultiPolygon/Polygon'),
+  ('sewage_ventilating_columns_5d31106a',               'vector', 'sewage_ventilating_columns_5d31106a.geojson',               'Point'),
+  ('sewerage_command_area_b186696c',                    'vector', 'sewerage_command_area_b186696c.geojson',                    'GeometryCollection')
 ON CONFLICT (layer_name) DO UPDATE SET
   layer_role  = EXCLUDED.layer_role,
   source_file = EXCLUDED.source_file,
@@ -78,7 +119,38 @@ DECLARE
   layer text;
   vector_layers text[] := ARRAY[
     'buildings', 'highway', 'natural_water', 'waterway', 'rainfall_stations',
-    'chennai2015_inundation', 'chennai2015_hotspots', 'chennai2015_flooded_streets'
+    'chennai2015_inundation', 'chennai2015_hotspots', 'chennai2015_flooded_streets',
+    -- 2026-10 expansion (see floin_expected_layers above)
+    'chennai_basin_buckingham_canal_map_1bb30ede',
+    'chennai_basin_macro_drains_map_80b07b87',
+    'chennai_basin_micro_drains_map_4d6437e5',
+    'chennai_basin_rivers_and_streams_map_9434de03',
+    'chennai_flood_hazard_zones_map_7f29da20',
+    'chennai_flooding_points_in_2015_93d2905a',
+    'chennai_flows_10_years_return_period_1bfef958',
+    'chennai_flows_100_years_return_period_994a99a1',
+    'chennai_flows_200_years_return_period_61f1f06f',
+    'chennai_flows_25_year_return_period_a6b4f2b1',
+    'chennai_flows_50_years_return_period_a6b20b7c',
+    'chennai_flows_5_year_return_period_ef3286de',
+    'chennai_gcc_flood_extent_2005_c49407c8',
+    'chennai_gcc_flood_hostspots_2020_3a141c21',
+    'chennai_inundation_points_with_depth_of_inundation_814ca028',
+    'chennai_neighbourhood_parks_map_81043b6d',
+    'chennai_rivers_map_c6393f3d',
+    'chennai_slum_boundaries_map_5959f0f4',
+    'chennai_slums_map_02144a0c',
+    'chennai_storm_water_drains_swd_map_2023_c4907fed',
+    'chennai_uchcs_map_a604ea86',
+    'chennai_uphcs_map_a33b403b',
+    'chennai_water_census_map_2023_7e357cf5',
+    'chennai_waterbodies_map_2019_8d557090',
+    'fl20151123ind_shp_ls8_20151014_preflood',
+    'fl20151123ind_shp_s1_20150901_preflood',
+    'fl20151123ind_shp_s1_20151112_flood',
+    'fl20151123ind_shp_s1_20151124_flood',
+    'sewage_ventilating_columns_5d31106a',
+    'sewerage_command_area_b186696c'
   ];
 BEGIN
   FOREACH layer IN ARRAY vector_layers LOOP
