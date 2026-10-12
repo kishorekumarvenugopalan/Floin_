@@ -1,0 +1,32 @@
+# Team repo local ignores — DB contribution (Senthil)
+# Personal full-stack clone nested inside this checkout — never commit it.
+# It is your Senthil455/Floin working copy, not team content.
+Floin/
+
+# Env — never commit secrets
+.env
+.env.local
+.env.production
+
+# Large raster inputs — keep locally, not in repo (Dockerfile bakes them)
+data/rasters/*.tif
+data/rasters/*.tfw
+data/rasters/rasters_COP30/
+
+# Shared database artifacts — never commit a materialised DB.
+# Publish dumps as GitHub Release assets (`python scripts/db_share.py publish`),
+# see docs/DB_SHARING.md.
+db/dumps/*.dump
+db/dumps/*.meta.json
+db/dumps/*.notes.md
+!db/dumps/.gitkeep
+db/pgdata/
+pgdata/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db

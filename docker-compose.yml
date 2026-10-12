@@ -1,0 +1,28 @@
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: floin-postgis
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-floin}
+      POSTGRES_USER: ${POSTGRES_USER:-floin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-floin}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Canonical schema from db/schema.sql — applied once, on first boot of an empty
+      # pgdata volume. Data itself is loaded by `npm run db:load` (or use the prebuilt
+      # image from db/Dockerfile, which bakes data in). See docs/DB_SHARING.md.
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/10-floin-schema.sql:ro
+      - ./data/vectors:/data/vectors:ro
+      - ./data/processed/vectors:/data/processed/vectors:ro
+      - ./data/rasters:/data/rasters:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U floin -d floin"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  pgdata:
