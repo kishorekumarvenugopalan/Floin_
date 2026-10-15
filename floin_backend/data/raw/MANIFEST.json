@@ -1,0 +1,182 @@
+{
+  "esa_worldcover_2021": {
+    "title": "ESA WorldCover 10 m 2021 v200 (tile N12E078), Chennai window",
+    "source_url": "https://esa-worldcover.s3.eu-central-1.amazonaws.com/v200/2021/map/ESA_WorldCover_10m_2021_v200_N12E078_Map.tif",
+    "publisher": "European Space Agency / WorldCover consortium",
+    "licence": "CC-BY 4.0",
+    "retrieved_at": "2026-10-08T19:46:01+00:00",
+    "notes": "Windowed read of the COG; pixel values and grid are unchanged from the source tile.",
+    "files": [
+      {
+        "path": "landcover/esa_worldcover_2021_v200_chennai.tif",
+        "bytes": 2422878,
+        "sha256": "2bef3dbd194a9bb3de6a1448823b9ceba56adc9b6b47fdb6eb0d6a2cd1007fd1"
+      }
+    ]
+  },
+  "soilgrids_texture": {
+    "title": "ISRIC SoilGrids 2.0 sand and clay content (g/kg), 0-5 cm and 30-60 cm, Chennai window",
+    "source_url": "https://files.isric.org/soilgrids/latest/data/{sand|clay}/{sand|clay}_{depth}_mean.vrt",
+    "publisher": "ISRIC - World Soil Information",
+    "licence": "CC-BY 4.0",
+    "retrieved_at": "2026-10-08T19:47:16+00:00",
+    "notes": "Native Interrupted Goode Homolosine grid (250 m). Model predictions, not field survey.",
+    "files": [
+      {
+        "path": "soil/soilgrids_sand_0-5cm_mean_chennai.tif",
+        "bytes": 25549,
+        "sha256": "7611cf7fb7cce62bcdd41478c90b7c4806bc9c0e87db4b5865decd353eab77b1"
+      },
+      {
+        "path": "soil/soilgrids_sand_30-60cm_mean_chennai.tif",
+        "bytes": 24703,
+        "sha256": "12e06387b18506dde0311f68aac9b3425094b740f4bb19f5410ad02212fc4025"
+      },
+      {
+        "path": "soil/soilgrids_clay_0-5cm_mean_chennai.tif",
+        "bytes": 25253,
+        "sha256": "a9ba1f93c2f16d453c6415258d549ef6f6bf4a41edc8326925b52f17d6f7f8fb"
+      },
+      {
+        "path": "soil/soilgrids_clay_30-60cm_mean_chennai.tif",
+        "bytes": 25965,
+        "sha256": "089589227dacaf67362464c559e6a22564a1290fe3b800992a0236cd9b292f4e"
+      }
+    ]
+  },
+  "chirps_2015_event": {
+    "title": "CHIRPS v2.0 daily precipitation (mm/day), 2015-11-28 to 2015-12-05",
+    "source_url": "https://data.chc.ucsb.edu/products/CHIRPS-2.0/global_daily/tifs/p05/2015/chirps-v2.0.2015.{MM}.{DD}.tif.gz",
+    "publisher": "UC Santa Barbara Climate Hazards Center",
+    "licence": "CC-BY 4.0 (public domain to the extent possible)",
+    "retrieved_at": "2026-10-08T19:47:27+00:00",
+    "notes": "Global .tif.gz kept as downloaded; *_chennai.tif are window clips with values unchanged.",
+    "files": [
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.11.28.tif.gz",
+        "bytes": 3087174,
+        "sha256": "701b9bec4420688c22dff49f5c51f256d4918679aec4ec2bba4a09326a9cd5cf"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-11-28_chennai.tif",
+        "bytes": 638,
+        "sha256": "8d26187d2504c4abf6868e7413030429e8019e6fa505f4f52e57081c9548db5a"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.11.29.tif.gz",
+        "bytes": 2585396,
+        "sha256": "738de9a9a377afc9f7ba4d7fa72d6e2d2b941ab1110acf431b4515784e6608e9"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-11-29_chennai.tif",
+        "bytes": 749,
+        "sha256": "25c5f13f9c7c5da8bc7933cddba0406fdd5f5fe3e79e8177f175fd274a52d444"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.11.30.tif.gz",
+        "bytes": 2671642,
+        "sha256": "9074a03e6b17824424a27caa18f111f2b27ef35225de38ba41219d053813b947"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-11-30_chennai.tif",
+        "bytes": 830,
+        "sha256": "a43c8546e78f3581536e45a2838f1ca4c51d582ae6f168ae8d0b063fc98a0f1d"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.12.01.tif.gz",
+        "bytes": 3184866,
+        "sha256": "81b7fb3e4176a054b58be8957536af82bde0b1cf5c612b2a484af5bc3ad3919e"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-12-01_chennai.tif",
+        "bytes": 830,
+        "sha256": "c485e36238ab99c9a46ca8817b76ea8142b49b55d927f847aa560d3e25c2f45d"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.12.02.tif.gz",
+        "bytes": 3506066,
+        "sha256": "b079a41fdff96c023afb817e750d2fdbd82416a30b5b504629f6b4f69a4e41eb"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-12-02_chennai.tif",
+        "bytes": 831,
+        "sha256": "dd7a19b3dd5a27795d0c540afaee1f18d2e850ef2ae6cd283470503fa7f87d10"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.12.03.tif.gz",
+        "bytes": 3429540,
+        "sha256": "3f5f12723f728e5acde5d6e60128cdca2d5663c33733eecadb895d244526e50a"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-12-03_chennai.tif",
+        "bytes": 594,
+        "sha256": "5c4f1f50f0e50fd8b63b060d5c220f0d56f4f7ff1ac144e7d7bd8e4cf3f2ca86"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.12.04.tif.gz",
+        "bytes": 3175543,
+        "sha256": "00ec490aeac61b2773f84ad25e629bcab7ffc5f7e4da13fae329e083b5b94f6d"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-12-04_chennai.tif",
+        "bytes": 594,
+        "sha256": "5c4f1f50f0e50fd8b63b060d5c220f0d56f4f7ff1ac144e7d7bd8e4cf3f2ca86"
+      },
+      {
+        "path": "rainfall/chirps/chirps-v2.0.2015.12.05.tif.gz",
+        "bytes": 3056683,
+        "sha256": "0b69960f1ab9ab2e3849e207c442b3164d20d6377591916ce97f4df64a6edba6"
+      },
+      {
+        "path": "rainfall/chirps/chirps_2015-12-05_chennai.tif",
+        "bytes": 749,
+        "sha256": "13dc84780aec9f983e475172ec7cd96b620444f13cb4abf80adf305005d54872"
+      }
+    ]
+  },
+  "osm_roads": {
+    "title": "OpenStreetMap roads for the Chennai model area (Overpass extract)",
+    "source_url": "https://overpass-api.de/api/interpreter",
+    "publisher": "OpenStreetMap contributors",
+    "licence": "ODbL 1.0",
+    "retrieved_at": "2026-10-09T01:17:26+00:00",
+    "notes": "Overpass selector: way[\"highway\"~\"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service|road|motorway_link|trunk_link|primary_link|secondary_link|tertiary_link)$\"]; OSM data timestamp 2026-10-09T01:16:05Z; 9 adaptive tiles merged, duplicates removed by element id.",
+    "files": [
+      {
+        "path": "osm/osm_roads_chennai.json.gz",
+        "bytes": 7533321,
+        "sha256": "f9e3aabe693fbc9d814c624661699fdda75074e2289958e497a5036c1e75d53b"
+      }
+    ]
+  },
+  "osm_railways": {
+    "title": "OpenStreetMap railways for the Chennai model area (Overpass extract)",
+    "source_url": "https://overpass-api.de/api/interpreter",
+    "publisher": "OpenStreetMap contributors",
+    "licence": "ODbL 1.0",
+    "retrieved_at": "2026-10-09T01:17:33+00:00",
+    "notes": "Overpass selector: way[\"railway\"~\"^(rail|subway|light_rail|monorail|narrow_gauge)$\"]; OSM data timestamp 2026-10-09T01:16:05Z; 1 adaptive tiles merged, duplicates removed by element id.",
+    "files": [
+      {
+        "path": "osm/osm_railways_chennai.json.gz",
+        "bytes": 161568,
+        "sha256": "d94977ae29b1ce353afeb254a7cc9941d2f52decdf5ecd4120c48ff276736eb8"
+      }
+    ]
+  },
+  "osm_buildings": {
+    "title": "OpenStreetMap buildings for the Chennai model area (Overpass extract)",
+    "source_url": "https://overpass-api.de/api/interpreter",
+    "publisher": "OpenStreetMap contributors",
+    "licence": "ODbL 1.0",
+    "retrieved_at": "2026-10-09T01:33:32+00:00",
+    "notes": "Overpass selector: way[\"building\"];relation[\"building\"][\"type\"=\"multipolygon\"]; OSM data timestamp 2026-10-09T01:31:26Z; 16 adaptive tiles merged, duplicates removed by element id.",
+    "files": [
+      {
+        "path": "osm/osm_buildings_chennai.json.gz",
+        "bytes": 21534400,
+        "sha256": "8102fe9b95edd1b18e42500ecfe874cf6ac811b83d67d1f691ffcf26db0ff871"
+      }
+    ]
+  }
+}

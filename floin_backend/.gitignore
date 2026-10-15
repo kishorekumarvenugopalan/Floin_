@@ -1,0 +1,19 @@
+.env
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Downloaded and generated data (reproducible with the scripts; large)
+data/raw/osm/
+data/raw/landcover/
+data/raw/soil/
+data/raw/rainfall/
+data/processed/*
+!data/processed/.gitkeep
+data/derived/
+data/storage/
+data/cache/
+data/reports/
+outputs/
