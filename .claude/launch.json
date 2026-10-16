@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "floin-api",
+      "runtimeExecutable": "floin_backend/venv/Scripts/python.exe",
+      "runtimeArgs": ["-m", "uvicorn", "app.main:app", "--app-dir", "floin_backend", "--port", "8000", "--reload", "--reload-dir", "floin_backend/app"],
+      "port": 8000
+    },
+    {
+      "name": "floin-frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
+      "port": 5173
+    }
+  ]
+}

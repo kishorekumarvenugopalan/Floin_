@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "chennai_slum_flood_exposure 1"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.25581177763749,
+          13.106124536135267
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "chennai_slum_flood_exposure 2"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.27667628364145,
+          13.098410837480245
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "chennai_slum_flood_exposure 3"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          80.20464737877836,
+          13.027758068949664
+        ]
+      }
+    }
+  ]
+}
