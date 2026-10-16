@@ -41,7 +41,7 @@ export default function SimulationWorkspace() {
     getSimulation(openRun, { signal: ctrl.signal })
       .then((run) => {
         setSelectedId(run.id)
-        setRestored({ runId: run.id, form: formFromParameters(run.parameters), label: `${run.scenario} (${run.id})` })
+        setRestored({ runId: run.id, form: formFromParameters(run.parameters), label: run.scenario })
         const loc = getRunLocation(run.id)
         if (loc) {
           const { savedAt: _savedAt, ...sel } = loc
@@ -82,22 +82,22 @@ export default function SimulationWorkspace() {
           <button type="button" onClick={() => setSidebar(false)} className="flex items-center gap-1 text-xs text-mangrove"><PanelLeftClose size={15} /> Show map</button>
         </div>
         <div className="scroll-thin flex-1 overflow-y-auto">
-          <SidebarSection n="1" title="Location">
+          <SidebarSection n="1" title="Choose a place">
             <LocationPanel onZoom={(a) => { zoomTo(a); if (window.matchMedia?.('(max-width: 1023px)').matches) setSidebar(false) }} />
           </SidebarSection>
 
-          <SidebarSection n="2" title="Simulation inputs">
+          <SidebarSection n="2" title="Set up the rain">
             {restoreError && <div className="mb-2"><ErrorState error={restoreError} title="Could not open that simulation" /></div>}
             <SimulationForm key={restored?.runId || 'new'} initial={restored?.form || DEFAULT_FORM} restoredFrom={restored?.label}
                             onSubmitted={onSubmitted} busy={running} />
             <p className="mt-2 text-[11px] leading-relaxed text-faint">
-              The simulation API has no location parameter: each run covers the whole 1,306 km² Chennai model area
-              (water flows across locality boundaries). Results are then read out for the selected location.
+              The simulation always covers all of Chennai, because water flows from one area into the next.
+              The results below then show what happens at the place you chose.
             </p>
           </SidebarSection>
 
           <div ref={resultsRef}>
-            <SidebarSection n="3" title="Simulation results" action={<Link to="/history" className="flex items-center gap-1 text-[11px] text-mangrove hover:underline"><History size={12} /> History</Link>}>
+            <SidebarSection n="3" title="Results" action={<Link to="/history" className="flex items-center gap-1 text-[11px] text-mangrove hover:underline"><History size={12} /> History</Link>}>
               <CurrentRun current={current} hasRuns={!!runs?.length} area={area} />
             </SidebarSection>
           </div>
@@ -128,7 +128,7 @@ export default function SimulationWorkspace() {
 function CurrentRun({ current, hasRuns, area }) {
   const { run, error, results, done } = current
   if (!hasRuns && !run) {
-    return <p className="text-xs leading-relaxed text-muted">No simulation yet. Enter rainfall above and press <b className="text-ink">Run simulation</b>; the results will appear here and on the map.</p>
+    return <p className="text-xs leading-relaxed text-muted">No simulation yet. Set up the rain above and press <b className="text-ink">Run simulation</b>. The results will appear here and on the map.</p>
   }
   if (error && !run) return <ErrorState error={error} title="Could not load the simulation" />
   if (!run) return <LoadingState rows={2} label="Loading simulation…" />
@@ -136,13 +136,13 @@ function CurrentRun({ current, hasRuns, area }) {
     <div className="space-y-3">
       <RunHeader run={run} />
       {(run.status === 'queued' || run.status === 'running') && <RunProgress run={run} />}
-      {run.status === 'failed' && <ErrorState title={`Simulation failed${run.current_stage ? ` at "${run.current_stage}"` : ''}`} error={{ message: run.error || 'No error message recorded.' }} />}
-      {done && results.loading && <LoadingState rows={3} label="Loading results…" />}
+      {run.status === 'failed' && <ErrorState title="This simulation could not finish" error={{ message: run.error || 'No error message recorded.' }} />}
+      {done && !results.data && !results.error && <LoadingState rows={3} label="Loading results…" />}
       {done && results.error && <ErrorState error={results.error} onRetry={results.reload} />}
       {done && results.data && (
         <>
           <div className="rounded-md border border-mangrove/30 bg-mangrove/5 p-2.5">
-            <h4 className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-mangrove">At the selected location</h4>
+            <h4 className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-mangrove">At the place you chose</h4>
             <LocationRunSummary area={area} runId={run.id} />
           </div>
           <RunSummary run={run} r={results.data} />
